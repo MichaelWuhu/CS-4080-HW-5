@@ -16,6 +16,17 @@ class AstPrinter implements Expr.Visitor<String> {
   }
 
   @Override
+  public String visitCallExpr(Expr.Call expr) {
+    StringBuilder builder = new StringBuilder();
+    builder.append("(call ").append(expr.callee.accept(this));
+    for (Expr argument : expr.arguments) {
+      builder.append(" ").append(argument.accept(this));
+    }
+    builder.append(")");
+    return builder.toString();
+  }
+
+  @Override
   public String visitConditionalExpr(Expr.Conditional expr) {
     return parenthesize("?:", expr.condition, expr.thenBranch, expr.elseBranch);
   }

@@ -7,8 +7,10 @@ abstract class Stmt {
     R visitBlockStmt(Block stmt);
     R visitBreakStmt(Break stmt);
     R visitExpressionStmt(Expression stmt);
+    R visitFunctionStmt(Function stmt);
     R visitIfStmt(If stmt);
     R visitPrintStmt(Print stmt);
+    R visitReturnStmt(Return stmt);
     R visitVarStmt(Var stmt);
     R visitWhileStmt(While stmt);
   }
@@ -36,6 +38,23 @@ abstract class Stmt {
     @Override
     <R> R accept(Visitor<R> visitor) {
       return visitor.visitExpressionStmt(this);
+    }
+  }
+
+  static class Function extends Stmt {
+    final Token name;
+    final java.util.List<Token> params;
+    final java.util.List<Stmt> body;
+
+    Function(Token name, java.util.List<Token> params, java.util.List<Stmt> body) {
+      this.name = name;
+      this.params = params;
+      this.body = body;
+    }
+
+    @Override
+    <R> R accept(Visitor<R> visitor) {
+      return visitor.visitFunctionStmt(this);
     }
   }
 
@@ -79,6 +98,21 @@ abstract class Stmt {
     @Override
     <R> R accept(Visitor<R> visitor) {
       return visitor.visitPrintStmt(this);
+    }
+  }
+
+  static class Return extends Stmt {
+    final Token keyword;
+    final Expr value;
+
+    Return(Token keyword, Expr value) {
+      this.keyword = keyword;
+      this.value = value;
+    }
+
+    @Override
+    <R> R accept(Visitor<R> visitor) {
+      return visitor.visitReturnStmt(this);
     }
   }
 
